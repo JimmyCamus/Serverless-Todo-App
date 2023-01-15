@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ children }: { children: ReactNode }) => {
   return (
@@ -25,10 +26,10 @@ const Navbar = ({ children }: { children: ReactNode }) => {
         <div className="flex-none hidden lg:block">
           <ul className="menu menu-horizontal">
             <li>
-              <a>Navbar Item 1</a>
+              <Link to="">Login</Link>
             </li>
             <li>
-              <a>Navbar Item 2</a>
+              <Link to="">Register</Link>
             </li>
           </ul>
         </div>
