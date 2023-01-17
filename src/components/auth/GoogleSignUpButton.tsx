@@ -1,8 +1,18 @@
+import { useRegisterWithGoogle } from "../../hooks/auth.hooks";
+import { useUser } from "../../lib/contexts/user.context";
 import Button from "../atoms/Button";
 
 const GoogleSignUpButton = () => {
+  const userContext = useUser();
+  const registerWithGoogle = useRegisterWithGoogle();
+  const handleRegisterWithGoogle = async () => {
+    await registerWithGoogle(userContext);
+  };
   return (
-    <Button className="btn btn-primary w-full">
+    <Button
+      className="btn btn-primary w-full"
+      onClick={handleRegisterWithGoogle}
+    >
       <span className="flex flex-row items-center justify-between w-full">
         <div className="w-1/4">
           <img
