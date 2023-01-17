@@ -1,4 +1,4 @@
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, signOut } from "firebase/auth";
 import { UserContextType } from "../lib/types/user.types";
 import {
   firebaseAuth,
@@ -13,10 +13,17 @@ const handleRegisterWithGoogle = async (userContext: UserContextType) => {
     const { displayName, email, photoURL, uid } = response.user;
     userContext.dispatch({
       type: "singin",
-      user: { displayName, email, photoURL, uid },
+      user: { username: displayName, email, photoURL, uid },
     });
   } catch (err: any) {
     console.error(err);
-    alert(err.message);
   }
+};
+
+export const useLogout = () => useHandleLogout;
+
+const useHandleLogout = async (userContext: UserContextType) => {
+  await signOut(firebaseAuth);
+  console.log("A");
+  userContext.dispatch({ type: "singout", user: null });
 };
