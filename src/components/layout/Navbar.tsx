@@ -1,7 +1,9 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { useUser } from "../../lib/contexts/user.context";
 
 const Navbar = ({ children }: { children: ReactNode }) => {
+  const { user } = useUser();
   return (
     <>
       <div className="w-full navbar bg-primary text-base-100">
@@ -26,14 +28,18 @@ const Navbar = ({ children }: { children: ReactNode }) => {
           <Link to={"/"}>To Do App</Link>
         </div>
         <div className="flex-none hidden lg:block">
-          <ul className="menu menu-horizontal">
-            <li>
-              <Link to="">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-          </ul>
+          {user ? (
+            <img className="rounded-full w-12" src={user.photoURL} alt="User profile" referrerPolicy="no-referrer" />
+          ) : (
+            <ul className="menu menu-horizontal">
+              <li>
+                <Link to="">Login</Link>
+              </li>
+              <li>
+                <Link to="/register">Register</Link>
+              </li>
+            </ul>
+          )}
         </div>
       </div>
       {children}
