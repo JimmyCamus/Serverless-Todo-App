@@ -1,10 +1,10 @@
 import { Dispatch, ReactNode, useContext, useReducer } from "react";
 import { createContext } from "react";
 import { userReducer } from "../reducers/user.reducer";
-import { Action } from "../types/user.types";
+import { Action, User } from "../types/user.types";
 
 export const UserContext = createContext({
-  user: null,
+  user: null as unknown as User,
   dispatch: (() => undefined) as Dispatch<Action>,
 });
 

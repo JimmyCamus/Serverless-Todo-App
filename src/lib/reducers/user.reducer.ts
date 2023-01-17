@@ -1,6 +1,6 @@
-import { Action } from "../types/user.types";
+import { Action, User } from "../types/user.types";
 
-export const userReducer = (user: any | null, action: Action) => {
+export const userReducer = (user: User | null, action: Action) => {
   switch (action.type) {
     case "singin": {
       return action.user;
