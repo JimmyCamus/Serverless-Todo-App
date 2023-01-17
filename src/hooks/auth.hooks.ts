@@ -9,13 +9,8 @@ import { NavigateFunction } from "react-router-dom";
 
 export const useRegisterWithGoogle = () => handleRegisterWithGoogle;
 
-const handleRegisterWithGoogle = async (
-  userContext: UserContextType,
-  navigate: NavigateFunction
-) => {
-  try {
-    await signInWithRedirect(firebaseAuth, googleAuthProvider);
-  } catch (err: any) {}
+const handleRegisterWithGoogle = async () => {
+  await signInWithRedirect(firebaseAuth, googleAuthProvider);
 };
 
 export const useLogout = () => useHandleLogout;

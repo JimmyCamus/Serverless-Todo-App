@@ -1,14 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import { useRegisterWithGoogle } from "../../hooks/auth.hooks";
-import { useUser } from "../../lib/contexts/user.context";
 import Button from "../atoms/Button";
 
 const GoogleSignUpButton = () => {
-  const userContext = useUser();
-  const navigate = useNavigate();
   const registerWithGoogle = useRegisterWithGoogle();
   const handleRegisterWithGoogle = async () => {
-    await registerWithGoogle(userContext, navigate);
+    await registerWithGoogle();
   };
   return (
     <Button
