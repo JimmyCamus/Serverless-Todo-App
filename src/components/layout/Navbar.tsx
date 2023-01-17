@@ -31,7 +31,7 @@ const Navbar = ({ children }: { children: ReactNode }) => {
               <Link to="">Login</Link>
             </li>
             <li>
-              <Link to="">Register</Link>
+              <Link to="/register">Register</Link>
             </li>
           </ul>
         </div>

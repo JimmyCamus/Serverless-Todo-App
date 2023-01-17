@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import Register from "./pages/Register";
 
 const App = () => {
   return (
@@ -9,6 +10,12 @@ const App = () => {
           <div>
             <h1>Hello World!</h1>
           </div>
+        }
+      />
+      <Route
+      path="/register"
+        element={
+          <Register />
         }
       />
     </Routes>
