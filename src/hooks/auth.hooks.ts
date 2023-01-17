@@ -5,10 +5,14 @@ import {
   googleAuthProvider,
 } from "../lib/config/firebase.config";
 import { useEffect } from "react";
+import { NavigateFunction } from "react-router-dom";
 
 export const useRegisterWithGoogle = () => handleRegisterWithGoogle;
 
-const handleRegisterWithGoogle = async (userContext: UserContextType) => {
+const handleRegisterWithGoogle = async (
+  userContext: UserContextType,
+  navigate: NavigateFunction
+) => {
   try {
     const response = await signInWithPopup(firebaseAuth, googleAuthProvider);
     const { displayName, email, photoURL, uid } = response.user;
@@ -16,6 +20,7 @@ const handleRegisterWithGoogle = async (userContext: UserContextType) => {
       type: "singin",
       user: { username: displayName, email, photoURL, uid },
     });
+    navigate("/");
   } catch (err: any) {
     console.error(err);
   }
