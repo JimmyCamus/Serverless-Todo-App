@@ -4,6 +4,7 @@ import {
   firebaseAuth,
   googleAuthProvider,
 } from "../lib/config/firebase.config";
+import { useEffect } from "react";
 
 export const useRegisterWithGoogle = () => handleRegisterWithGoogle;
 
@@ -24,6 +25,25 @@ export const useLogout = () => useHandleLogout;
 
 const useHandleLogout = async (userContext: UserContextType) => {
   await signOut(firebaseAuth);
-  console.log("A");
   userContext.dispatch({ type: "singout", user: null });
+};
+
+export const useAuth = (userContext: UserContextType) => {
+  useEffect(() => {
+    firebaseAuth.onAuthStateChanged((user) => {
+      if (!user) {
+        return;
+      }
+      userContext.dispatch({
+        type: "singin",
+        user: {
+          email: user.email,
+          username: user.displayName,
+          uid: user.uid,
+          photoURL: user.photoURL ?? "https://icons8.com/icon/98957/user",
+        },
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };
