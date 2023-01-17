@@ -6,7 +6,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div>
       <Navigator>
-        <div className="w-[90vw]">{children}</div>
+        <div className="flex justify-center h-full">
+          <div className="w-[90vw]">{children}</div>
+        </div>
       </Navigator>
       <Footer />
     </div>
