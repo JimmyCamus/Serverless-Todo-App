@@ -59,23 +59,28 @@ const handleLoginWithEmailAndPassword = async (
   email: string,
   password: string,
   userContext: UserContextType
-) => {
-  await signInWithEmailAndPassword(firebaseAuth, email, password);
+): Promise<boolean> => {
+  try {
+    await signInWithEmailAndPassword(firebaseAuth, email, password);
 
-  if (!firebaseAuth.currentUser) {
-    return;
+    if (!firebaseAuth.currentUser) {
+      return false;
+    }
+
+    const user = firebaseAuth.currentUser;
+    userContext.dispatch({
+      type: "singin",
+      user: {
+        email: user.email,
+        username: user.displayName,
+        uid: user.uid,
+        photoURL: user.photoURL ?? UserAsset,
+      },
+    });
+    return true;
+  } catch (error: any) {
+    return false;
   }
-
-  const user = firebaseAuth.currentUser;
-  userContext.dispatch({
-    type: "singin",
-    user: {
-      email: user.email,
-      username: user.displayName,
-      uid: user.uid,
-      photoURL: user.photoURL ?? UserAsset,
-    },
-  });
 };
 
 export const useLogout = () => useHandleLogout;
