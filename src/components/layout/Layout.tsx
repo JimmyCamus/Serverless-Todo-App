@@ -17,11 +17,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
       ) : (
         <>
           <Navigator>
-            <div className="flex justify-center h-full">
-              <div className="w-[90vw]">{children}</div>
+            <div className="flex justify-center">
+              <div className="w-[90vw] h-[100vh]">{children}</div>
             </div>
+            <Footer />
           </Navigator>
-          <Footer />
         </>
       )}
     </div>

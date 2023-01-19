@@ -32,7 +32,7 @@ const Sidebar = () => {
       ) : (
         <ul className="menu p-4 w-80 bg-base-100">
           <li>
-            <Link to="">Login</Link>
+            <Link to="/login">Login</Link>
           </li>
           <li>
             <Link to="/register">Register</Link>
