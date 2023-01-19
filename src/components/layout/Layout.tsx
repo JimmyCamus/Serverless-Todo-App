@@ -11,7 +11,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const router = useNavigate();
   useAuth(userContext, router, setIsLoading);
   return (
-    <div>
+    <div className="font-poppins">
       {isLoading ? (
         <progress className="progress progress-primary w-full"></progress>
       ) : (
