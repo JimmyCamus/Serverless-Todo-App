@@ -1,16 +1,18 @@
 import { Route, Routes } from "react-router-dom";
+import Register from "./pages/Register";
 
 const App = () => {
   return (
     <Routes>
       <Route
-      path="/"
+        path="/"
         element={
           <div>
             <h1>Hello World!</h1>
           </div>
         }
       />
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 };
