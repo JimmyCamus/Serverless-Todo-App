@@ -1,4 +1,10 @@
-import { getRedirectResult, signInWithRedirect, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getRedirectResult,
+  signInWithRedirect,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 import { UserContextType } from "../lib/types/user.types";
 import {
   firebaseAuth,
@@ -6,11 +12,43 @@ import {
 } from "../lib/config/firebase.config";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { NavigateFunction } from "react-router-dom";
+import UserAsset from "../assets/user-asset.png";
 
 export const useRegisterWithGoogle = () => handleRegisterWithGoogle;
 
 const handleRegisterWithGoogle = async () => {
   await signInWithRedirect(firebaseAuth, googleAuthProvider);
+};
+
+export const useRegisterWithEmailAndPassword = () =>
+  handleRegisterWithEmailAndPassword;
+
+const handleRegisterWithEmailAndPassword = async (
+  email: string,
+  password: string,
+  username: string,
+  userContext: UserContextType
+) => {
+  await createUserWithEmailAndPassword(firebaseAuth, email, password);
+
+  if (!firebaseAuth.currentUser) {
+    return;
+  }
+
+  await updateProfile(firebaseAuth.currentUser, {
+    displayName: username,
+  });
+
+  const user = firebaseAuth.currentUser;
+  userContext.dispatch({
+    type: "singin",
+    user: {
+      email: user.email,
+      username: user.displayName,
+      uid: user.uid,
+      photoURL: user.photoURL ?? UserAsset,
+    },
+  });
 };
 
 export const useLogout = () => useHandleLogout;
@@ -46,7 +84,7 @@ export const useAuth = (
           email: user.email,
           username: user.displayName,
           uid: user.uid,
-          photoURL: user.photoURL ?? "https://icons8.com/icon/98957/user",
+          photoURL: user.photoURL ?? UserAsset,
         },
       });
       setIsloading(false);
