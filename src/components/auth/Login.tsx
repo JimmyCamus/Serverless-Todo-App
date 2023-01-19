@@ -1,9 +1,14 @@
 import LoginFigure from "../../assets/LoginFigure";
+import { LoginFormEntry } from "../../lib/types/entry.types";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
 import GoogleSignUpButton from "./GoogleSignUpButton";
 
-const LoginForm = () => {
+const LoginForm = ({
+  loginFormValues,
+  setLoginFormValues,
+  handleSubmit,
+}: LoginFormEntry) => {
   return (
     <div className="grid lg:grid-cols-2 h-full">
       <div className="hidden lg:block w-full">
@@ -17,18 +22,30 @@ const LoginForm = () => {
             <h2 className="text-2xl text-center">
               Sign in to start organize your life!
             </h2>
-            <form className="grid place-items-center">
+            <form className="grid place-items-center" onSubmit={handleSubmit}>
               <Input
                 label="Email"
                 placeholder="youremail@domain.com"
                 type="email"
                 className="w-full"
+                onChange={(e) =>
+                  setLoginFormValues({
+                    ...loginFormValues,
+                    email: e.target.value,
+                  })
+                }
               />
               <Input
                 label="Password"
                 placeholder="Your Password"
                 type="password"
                 className="w-full"
+                onChange={(e) =>
+                  setLoginFormValues({
+                    ...loginFormValues,
+                    password: e.target.value,
+                  })
+                }
               />
               <Button type="submit" className="btn btn-secondary w-full my-4">
                 SIGN IN

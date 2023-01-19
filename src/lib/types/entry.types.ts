@@ -1,5 +1,5 @@
 import React, { Dispatch, ReactNode, SetStateAction } from "react";
-import { RegisterFormValuesType } from "./auth.types";
+import { LoginFormValuesType, RegisterFormValuesType } from "./auth.types";
 
 export type InputEntry = {
   label: string;
@@ -20,5 +20,11 @@ export type ButtonEntry = {
 export type RegisterFormEntry = {
   registerFormValues: RegisterFormValuesType;
   setRegisterFormValues: Dispatch<SetStateAction<RegisterFormValuesType>>;
+  handleSubmit: React.FormEventHandler<HTMLFormElement>;
+};
+
+export type LoginFormEntry = {
+  loginFormValues: LoginFormValuesType;
+  setLoginFormValues: Dispatch<SetStateAction<LoginFormValuesType>>;
   handleSubmit: React.FormEventHandler<HTMLFormElement>;
 };

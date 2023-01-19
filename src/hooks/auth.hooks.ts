@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   getRedirectResult,
+  signInWithEmailAndPassword,
   signInWithRedirect,
   signOut,
   updateProfile,
@@ -38,6 +39,32 @@ const handleRegisterWithEmailAndPassword = async (
   await updateProfile(firebaseAuth.currentUser, {
     displayName: username,
   });
+
+  const user = firebaseAuth.currentUser;
+  userContext.dispatch({
+    type: "singin",
+    user: {
+      email: user.email,
+      username: user.displayName,
+      uid: user.uid,
+      photoURL: user.photoURL ?? UserAsset,
+    },
+  });
+};
+
+export const useLoginWithEmailAndPassword = () =>
+  handleLoginWithEmailAndPassword;
+
+const handleLoginWithEmailAndPassword = async (
+  email: string,
+  password: string,
+  userContext: UserContextType
+) => {
+  await signInWithEmailAndPassword(firebaseAuth, email, password);
+
+  if (!firebaseAuth.currentUser) {
+    return;
+  }
 
   const user = firebaseAuth.currentUser;
   userContext.dispatch({
