@@ -5,6 +5,7 @@ const Input = ({
   label,
   type,
   placeholder,
+  onChange,
   required = true,
 }: InputEntry) => {
   return (
@@ -16,6 +17,7 @@ const Input = ({
           placeholder={placeholder}
           className={`input input-bordered ${className}`}
           required={required}
+          onChange={onChange}
         />
       </label>
     </>
