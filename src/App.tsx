@@ -1,18 +1,14 @@
 import { Route, Routes } from "react-router-dom";
+import { useUser } from "./lib/contexts/user.context";
+import LandingPage from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 const App = () => {
+  const { user } = useUser();
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <div>
-            <h1>Hello World!</h1>
-          </div>
-        }
-      />
+      <Route path="/" element={user ? null : <LandingPage />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
     </Routes>
