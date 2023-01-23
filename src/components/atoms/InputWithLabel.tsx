@@ -1,19 +1,21 @@
-import { InputEntry } from "../../lib/types/entry.types";
+import { InputWithLabelEntry } from "../../lib/types/entry.types";
 
-const Input = ({
+const InputWithLabel = ({
   className,
+  label,
   type,
   placeholder,
   onChange,
   required = true,
-}: InputEntry) => {
+}: InputWithLabelEntry) => {
   return (
     <>
       <label className="input-group my-4">
+        <span className="w-32">{label}</span>
         <input
           type={type}
           placeholder={placeholder}
-          className={`input ${className}`}
+          className={`input input-bordered ${className}`}
           required={required}
           onChange={onChange}
         />
@@ -22,4 +24,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default InputWithLabel;

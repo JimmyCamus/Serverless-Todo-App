@@ -1,7 +1,7 @@
 import RegisterFigure from "../../assets/RegisterFigure";
 import { RegisterFormEntry } from "../../lib/types/entry.types";
 import Button from "../atoms/Button";
-import Input from "../atoms/Input";
+import InputWithLabel from "../atoms/InputWithLabel";
 import GoogleSignUpButton from "./GoogleSignUpButton";
 
 const RegisterForm = ({
@@ -26,7 +26,7 @@ const RegisterForm = ({
               className="grid place-items-center"
               onSubmit={handleSubmit}
             >
-              <Input
+              <InputWithLabel
                 label="Email"
                 placeholder="youremail@domain.com"
                 type="email"
@@ -38,7 +38,7 @@ const RegisterForm = ({
                   })
                 }
               />
-              <Input
+              <InputWithLabel
                 label="Username"
                 placeholder="Your Username"
                 type="text"
@@ -50,7 +50,7 @@ const RegisterForm = ({
                   })
                 }
               />
-              <Input
+              <InputWithLabel
                 label="Password"
                 placeholder="Your Password"
                 type="password"
