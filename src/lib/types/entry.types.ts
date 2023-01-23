@@ -2,6 +2,14 @@ import React, { Dispatch, ReactNode, SetStateAction } from "react";
 import { LoginFormValuesType, RegisterFormValuesType } from "./auth.types";
 
 export type InputEntry = {
+  type: React.HTMLInputTypeAttribute;
+  placeholder: string;
+  className?: string;
+  required?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+};
+
+export type InputWithLabelEntry = {
   label: string;
   type: React.HTMLInputTypeAttribute;
   placeholder: string;

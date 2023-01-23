@@ -1,7 +1,7 @@
 import LoginFigure from "../../assets/LoginFigure";
 import { LoginFormEntry } from "../../lib/types/entry.types";
 import Button from "../atoms/Button";
-import Input from "../atoms/Input";
+import InputWithLabel from "../atoms/InputWithLabel";
 import GoogleSignUpButton from "./GoogleSignUpButton";
 
 const LoginForm = ({
@@ -23,7 +23,7 @@ const LoginForm = ({
               Sign in to start organize your life!
             </h2>
             <form className="grid place-items-center" onSubmit={handleSubmit}>
-              <Input
+              <InputWithLabel
                 label="Email"
                 placeholder="youremail@domain.com"
                 type="email"
@@ -35,7 +35,7 @@ const LoginForm = ({
                   })
                 }
               />
-              <Input
+              <InputWithLabel
                 label="Password"
                 placeholder="Your Password"
                 type="password"
