@@ -36,3 +36,8 @@ export type LoginFormEntry = {
   setLoginFormValues: Dispatch<SetStateAction<LoginFormValuesType>>;
   handleSubmit: React.FormEventHandler<HTMLFormElement>;
 };
+
+export type CheckBoxEntry = {
+  onClick?: React.MouseEventHandler<HTMLInputElement>;
+  checked?: boolean;
+};
