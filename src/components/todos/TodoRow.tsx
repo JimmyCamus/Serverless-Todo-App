@@ -5,7 +5,8 @@ import LoadingBar from "../atoms/LoadingBar";
 import TrashIcon from "../icons/TrashIcon";
 
 const TodoRow = ({ todo }: { todo: Todo }) => {
-  const { isCompleted, isLoading, handleEditTodo } = useEditTodo(todo);
+  const { todoTitle, setTodoTitle, isCompleted, isLoading, handleEditTodo } =
+    useEditTodo(todo);
   return (
     <div
       className={`
@@ -20,18 +21,20 @@ const TodoRow = ({ todo }: { todo: Todo }) => {
       ) : (
         <div className="card-body">
           <div className="card-title justify-between">
-            <div className="flex flex-row">
+            <div className="flex flex-row items-center">
               <CheckBox
                 checked={isCompleted}
                 onClick={() => handleEditTodo("completed")}
               />
-              <h2
-                className={`mx-9 ${
+              <input
+                className={`input-ghost bg-transparent w-full mx-9 ${
                   isCompleted ? "line-through decoration-2" : null
                 }`}
-              >
-                {todo.title}
-              </h2>
+                value={todoTitle}
+                onChange={(e) => setTodoTitle(e.target.value)}
+                onBlur={() => handleEditTodo("edit")}
+                type="text"
+              />
             </div>
             <div className="hidden lg:block">
               <span className="text-sm font-normal">

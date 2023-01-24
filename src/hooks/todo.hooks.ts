@@ -71,6 +71,7 @@ const firebaseListener = (
 };
 
 export const useEditTodo = (todo: Todo) => {
+  const [todoTitle, setTodoTitle] = useState<string>(todo.title);
   const [isCompleted, setIsCompleted] = useState<boolean>(todo.completed);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleEditTodo = async (type: "edit" | "completed" | "delete") => {
@@ -80,10 +81,17 @@ export const useEditTodo = (todo: Todo) => {
         await EditTodo(todo.uid as string, { completed: !isCompleted });
         setIsCompleted(!isCompleted);
         break;
-        
+
       case "delete":
         setIsCompleted(false);
         await EditTodo(todo.uid as string, { enabled: false });
+        break;
+
+      case "edit":
+        if (todoTitle === todo.title) {
+          break;
+        }
+        await EditTodo(todo.uid as string, { title: todoTitle });
         break;
 
       default:
@@ -92,5 +100,5 @@ export const useEditTodo = (todo: Todo) => {
     setIsLoading(false);
   };
 
-  return { isCompleted, isLoading, handleEditTodo };
+  return { todoTitle, setTodoTitle, isCompleted, isLoading, handleEditTodo };
 };
