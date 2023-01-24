@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CreateTodo, GetTodosByUser } from "../api/todo.api.ts";
+import { CreateTodo, EditTodo, GetTodosByUser } from "../api/todo.api.ts";
 import { fireStore } from "../lib/config/firebase.config";
 import { useUser } from "../lib/contexts/user.context";
 import { Todo } from "../lib/types/todo.types";
@@ -53,6 +53,7 @@ const firebaseListener = (
   );
   onSnapshot(q, (querySnapshot) => {
     const todos = querySnapshot.docs.map((doc) => ({
+      uid: doc.id,
       createdAt: new Date(doc.data().createdAt.seconds * 1000),
       enabled: doc.data().enabled,
       title: doc.data().title,
@@ -67,4 +68,24 @@ const firebaseListener = (
     );
     setTodo(sortedTodos);
   });
+};
+
+export const useEditTodo = (todo: Todo) => {
+  const [isCompleted, setIsCompleted] = useState<boolean>(todo.completed);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const handleEditTodo = async (type: "edit" | "completed" | "delte") => {
+    setIsLoading(true);
+    switch (type) {
+      case "completed":
+        await EditTodo(todo.uid as string, { completed: !isCompleted });
+        setIsCompleted(!isCompleted);
+        break;
+
+      default:
+        break;
+    }
+    setIsLoading(false);
+  };
+
+  return { isCompleted, isLoading, handleEditTodo };
 };
