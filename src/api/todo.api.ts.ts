@@ -47,7 +47,7 @@ export const GetTodosByUser = async (user: User) => {
     createdAt: new Date(doc.data().createdAt.seconds * 1000),
     enabled: doc.data().enabled,
     title: doc.data().title,
-    user: { email: doc.data().email, username: doc.data().username },
+    user: { email: doc.data().user.email, username: doc.data().user.username },
     completed: doc.data().completed,
   }));
 
