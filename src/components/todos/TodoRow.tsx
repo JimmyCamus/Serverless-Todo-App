@@ -51,6 +51,7 @@ const TodoRow = ({ todo }: { todo: Todo }) => {
             </p>
             <button
               className={`${isCompleted ? "text-white" : "text-red-600"}`}
+              onClick={() => handleEditTodo("delete")}
             >
               <TrashIcon />
             </button>

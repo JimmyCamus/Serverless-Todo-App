@@ -73,12 +73,17 @@ const firebaseListener = (
 export const useEditTodo = (todo: Todo) => {
   const [isCompleted, setIsCompleted] = useState<boolean>(todo.completed);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const handleEditTodo = async (type: "edit" | "completed" | "delte") => {
+  const handleEditTodo = async (type: "edit" | "completed" | "delete") => {
     setIsLoading(true);
     switch (type) {
       case "completed":
         await EditTodo(todo.uid as string, { completed: !isCompleted });
         setIsCompleted(!isCompleted);
+        break;
+        
+      case "delete":
+        setIsCompleted(false);
+        await EditTodo(todo.uid as string, { enabled: false });
         break;
 
       default:
