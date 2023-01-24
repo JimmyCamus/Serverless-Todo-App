@@ -56,9 +56,15 @@ const firebaseListener = (
       createdAt: new Date(doc.data().createdAt.seconds * 1000),
       enabled: doc.data().enabled,
       title: doc.data().title,
-      user: { email: doc.data().user.email, username: doc.data().user.username },
+      user: {
+        email: doc.data().user.email,
+        username: doc.data().user.username,
+      },
       completed: doc.data().completed,
     }));
-    setTodo(todos);
+    const sortedTodos = todos.sort((a, b) =>
+      a.createdAt.getTime() < b.createdAt.getTime() ? -1 : 1
+    );
+    setTodo(sortedTodos);
   });
 };
