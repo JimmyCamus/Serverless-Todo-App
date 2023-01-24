@@ -1,5 +1,6 @@
 import { useCreateTodo } from "../../hooks/todo.hooks";
 import Input from "../atoms/Input";
+import LoadingBar from "../atoms/LoadingBar";
 import CreateTodoIcon from "../icons/CreateTodoIcon";
 
 const CreateTodoSection = () => {
@@ -7,7 +8,7 @@ const CreateTodoSection = () => {
   return (
     <>
       {isLoading ? (
-        <progress className="progress progress-primary w-full"></progress>
+        <LoadingBar className="progress-primary w-full" />
       ) : (
         <form
           className="flex flex-row items-center justify-evenly"
