@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CreateTodo, GetTodosByUser } from "../api/todo.api.ts";
+import { CreateTodo, EditTodo, GetTodosByUser } from "../api/todo.api.ts";
 import { fireStore } from "../lib/config/firebase.config";
 import { useUser } from "../lib/contexts/user.context";
 import { Todo } from "../lib/types/todo.types";
@@ -53,12 +53,52 @@ const firebaseListener = (
   );
   onSnapshot(q, (querySnapshot) => {
     const todos = querySnapshot.docs.map((doc) => ({
+      uid: doc.id,
       createdAt: new Date(doc.data().createdAt.seconds * 1000),
       enabled: doc.data().enabled,
       title: doc.data().title,
-      user: { email: doc.data().user.email, username: doc.data().user.username },
+      user: {
+        email: doc.data().user.email,
+        username: doc.data().user.username,
+      },
       completed: doc.data().completed,
     }));
-    setTodo(todos);
+    const sortedTodos = todos.sort((a, b) =>
+      a.createdAt.getTime() < b.createdAt.getTime() ? -1 : 1
+    );
+    setTodo(sortedTodos);
   });
+};
+
+export const useEditTodo = (todo: Todo) => {
+  const [todoTitle, setTodoTitle] = useState<string>(todo.title);
+  const [isCompleted, setIsCompleted] = useState<boolean>(todo.completed);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const handleEditTodo = async (type: "edit" | "completed" | "delete") => {
+    setIsLoading(true);
+    switch (type) {
+      case "completed":
+        await EditTodo(todo.uid as string, { completed: !isCompleted });
+        setIsCompleted(!isCompleted);
+        break;
+
+      case "delete":
+        setIsCompleted(false);
+        await EditTodo(todo.uid as string, { enabled: false });
+        break;
+
+      case "edit":
+        if (todoTitle === todo.title) {
+          break;
+        }
+        await EditTodo(todo.uid as string, { title: todoTitle });
+        break;
+
+      default:
+        break;
+    }
+    setIsLoading(false);
+  };
+
+  return { todoTitle, setTodoTitle, isCompleted, isLoading, handleEditTodo };
 };

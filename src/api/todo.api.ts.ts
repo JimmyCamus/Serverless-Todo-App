@@ -1,9 +1,11 @@
 import {
   addDoc,
   collection,
+  doc,
   getDocs,
   query,
   Timestamp,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { fireStore } from "../lib/config/firebase.config";
@@ -44,6 +46,7 @@ export const GetTodosByUser = async (user: User) => {
   const querySnapshot = await getDocs(q);
 
   const todos: Todo[] = querySnapshot.docs.map((doc) => ({
+    uid: doc.id,
     createdAt: new Date(doc.data().createdAt.seconds * 1000),
     enabled: doc.data().enabled,
     title: doc.data().title,
@@ -52,4 +55,9 @@ export const GetTodosByUser = async (user: User) => {
   }));
 
   return todos;
+};
+
+export const EditTodo = async (uid: string, editValue: any) => {
+  const docRef = doc(fireStore, "todos", uid);
+  await updateDoc(docRef, editValue);
 };

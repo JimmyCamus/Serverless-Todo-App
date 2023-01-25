@@ -1,4 +1,5 @@
 export type Todo = {
+  uid: string | number;
   createdAt: Date;
   enabled: true;
   title: string;
