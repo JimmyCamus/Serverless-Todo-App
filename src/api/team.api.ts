@@ -1,11 +1,10 @@
 import {
-  collection,
   doc,
+  DocumentData,
   getDocs,
-  query,
+  Query,
   setDoc,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import { fireStore } from "../lib/config/firebase.config";
 import { Team } from "../lib/types/team.types";
@@ -29,14 +28,7 @@ export const CreateTeam = async (user: User) => {
   }
 };
 
-export const GetTeam = async (user: User) => {
-  const q = query(
-    collection(fireStore, "teams"),
-    where("users", "array-contains", {
-      username: user.username,
-      photoURL: user.photoURL,
-    })
-  );
+export const GetTeam = async (q: Query<DocumentData>) => {
   const querySnapshot = await getDocs(q);
 
   if (querySnapshot.docs.length === 0) {
@@ -53,6 +45,6 @@ export const GetTeam = async (user: User) => {
 };
 
 export const EditTeam = async (uid: string, editValue: any) => {
-  const docRef = doc(fireStore, "todos", uid);
+  const docRef = doc(fireStore, "teams", uid);
   await updateDoc(docRef, editValue);
 };

@@ -1,5 +1,7 @@
+import { collection, query, where } from "firebase/firestore";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CreateTeam, EditTeam, GetTeam } from "../api/team.api";
+import { fireStore } from "../lib/config/firebase.config";
 import { useUser } from "../lib/contexts/user.context";
 import { Team } from "../lib/types/team.types";
 
@@ -8,7 +10,14 @@ export const useTeam = () => {
   const { user } = useUser();
   useEffect(() => {
     const handleGetTeam = async () => {
-      const team = await GetTeam(user);
+      const q = query(
+        collection(fireStore, "teams"),
+        where("users", "array-contains", {
+          username: user.username,
+          photoURL: user.photoURL,
+        })
+      );
+      const team = await GetTeam(q);
       setTeam(team);
     };
     handleGetTeam();
@@ -24,16 +33,30 @@ export const useCreateTeam = (
   const { user } = useUser();
   const handleCreateTeam = async () => {
     await CreateTeam(user);
-    const team = await GetTeam(user);
+    const q = query(
+      collection(fireStore, "teams"),
+      where("users", "array-contains", {
+        username: user.username,
+        photoURL: user.photoURL,
+      })
+    );
+    const team = await GetTeam(q);
     setTeam(team);
   };
   return { handleCreateTeam };
 };
 
-export const useJoinTeam = (team: Team) => {
+export const useJoinTeam = () => {
   const { user } = useUser();
-  const handleJoinTeam = async () => {
-    await EditTeam(team.id, {
+
+  const handleJoinTeam = async (teamId: string) => {
+    console.log(teamId);
+    const q = query(collection(fireStore, "teams"), where("id", "==", teamId));
+    const team = await GetTeam(q);
+    if (!team) {
+      return;
+    }
+    await EditTeam(team.uid as string, {
       users: [
         ...team.users,
         { username: user.username, photoURL: user.photoURL },
