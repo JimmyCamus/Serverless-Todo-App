@@ -1,4 +1,11 @@
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  DocumentData,
+  onSnapshot,
+  Query,
+  query,
+  where,
+} from "firebase/firestore";
 import {
   Dispatch,
   FormEvent,
@@ -9,8 +16,8 @@ import {
 import { CreateTodo, EditTodo, GetTodosByUser } from "../api/todo.api";
 import { fireStore } from "../lib/config/firebase.config";
 import { useUser } from "../lib/contexts/user.context";
+import { Team } from "../lib/types/team.types";
 import { Todo } from "../lib/types/todo.types";
-import { User } from "../lib/types/user.types";
 
 export const useCreateTodo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -35,7 +42,35 @@ export const useGetTodosByUser = () => {
       setTodos(data);
     };
     handleGetTodos();
-    firebaseListener(setTodos, user);
+    const q = query(
+      collection(fireStore, "todos"),
+      where("user.email", "==", user.email),
+      where("enabled", "==", true)
+    );
+    firebaseListener(setTodos, q);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  return { todos, user };
+};
+
+export const useGetTodosByTeam = (team: Team) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const { user } = useUser();
+  useEffect(() => {
+    const handleGetTodos = async () => {
+      const data = await GetTodosByUser(user);
+      setTodos(data);
+    };
+    handleGetTodos();
+    const q = query(
+      collection(fireStore, "teams"),
+      where("users", "array-contains", {
+        username: user.username,
+        photoURL: user.photoURL,
+      })
+    );
+    firebaseListener(setTodos, q);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
@@ -44,14 +79,9 @@ export const useGetTodosByUser = () => {
 
 const firebaseListener = (
   setTodo: Dispatch<SetStateAction<Todo[]>>,
-  user: User
+  query: Query<DocumentData>
 ) => {
-  const q = query(
-    collection(fireStore, "todos"),
-    where("user.email", "==", user.email),
-    where("enabled", "==", true)
-  );
-  onSnapshot(q, (querySnapshot) => {
+  onSnapshot(query, (querySnapshot) => {
     const todos = querySnapshot.docs.map((doc) => ({
       uid: doc.id,
       createdAt: new Date(doc.data().createdAt.seconds * 1000),
@@ -62,6 +92,7 @@ const firebaseListener = (
         username: doc.data().user.username,
       },
       completed: doc.data().completed,
+      teamId: doc.data().teamId,
     }));
     const sortedTodos = todos.sort((a, b) =>
       a.createdAt.getTime() < b.createdAt.getTime() ? -1 : 1
