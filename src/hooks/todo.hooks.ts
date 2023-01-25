@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CreateTodo, EditTodo, GetTodosByUser } from "../api/todo.api.ts";
+import { CreateTodo, EditTodo, GetTodosByUser } from "../api/todo.api";
 import { fireStore } from "../lib/config/firebase.config";
 import { useUser } from "../lib/contexts/user.context";
 import { Todo } from "../lib/types/todo.types";
