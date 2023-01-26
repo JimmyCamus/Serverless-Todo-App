@@ -17,6 +17,7 @@ import {
   CreateTodo,
   CreateTodoByTeam,
   EditTodo,
+  GetTodosByTeam,
   GetTodosByUser,
 } from "../api/todo.api";
 import { fireStore } from "../lib/config/firebase.config";
@@ -55,11 +56,12 @@ export const useGetTodosByUser = () => {
     const q = query(
       collection(fireStore, "todos"),
       where("user.email", "==", user.email),
-      where("enabled", "==", true)
+      where("enabled", "==", true),
+      where("teamId", "==", "")
     );
     firebaseListener(setTodos, q);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, []);
 
   return { todos, user };
 };
@@ -69,16 +71,14 @@ export const useGetTodosByTeam = (team: Team) => {
   const { user } = useUser();
   useEffect(() => {
     const handleGetTodos = async () => {
-      const data = await GetTodosByUser(user);
+      const data = await GetTodosByTeam(team);
       setTodos(data);
     };
     handleGetTodos();
     const q = query(
-      collection(fireStore, "teams"),
-      where("users", "array-contains", {
-        username: user.username,
-        photoURL: user.photoURL,
-      })
+      collection(fireStore, "todos"),
+      where("teamId", "==", team.id),
+      where("enabled", "==", true)
     );
     firebaseListener(setTodos, q);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,24 +112,25 @@ const firebaseListener = (
 };
 
 export const useEditTodo = (todo: Todo) => {
-  const [todoTitle, setTodoTitle] = useState<string>(todo.title);
+  const [todoTitle, setTodoTitle] = useState<string>("");
   const [isCompleted, setIsCompleted] = useState<boolean>(todo.completed);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleEditTodo = async (type: "edit" | "completed" | "delete") => {
     setIsLoading(true);
     switch (type) {
       case "completed":
-        await EditTodo(todo.uid as string, { completed: !isCompleted });
-        setIsCompleted(!isCompleted);
+        await EditTodo(todo.uid as string, { completed: !todo.completed });
+        setIsCompleted(!todo.completed);
         break;
 
       case "delete":
         setIsCompleted(false);
         await EditTodo(todo.uid as string, { enabled: false });
+        setTodoTitle("");
         break;
 
       case "edit":
-        if (todoTitle === todo.title) {
+        if (todoTitle === todo.title || todoTitle.trim() === "" ) {
           break;
         }
         await EditTodo(todo.uid as string, { title: todoTitle });
