@@ -7,8 +7,10 @@ import { Team } from "../lib/types/team.types";
 
 export const useTeam = () => {
   const [team, setTeam] = useState<Team>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { user } = useUser();
   useEffect(() => {
+    setIsLoading(true);
     const handleGetTeam = async () => {
       const q = query(
         collection(fireStore, "teams"),
@@ -19,12 +21,13 @@ export const useTeam = () => {
       );
       const team = await GetTeam(q);
       setTeam(team);
+      setIsLoading(false);
     };
     handleGetTeam();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { team, setTeam };
+  return { isLoading, team, setTeam };
 };
 
 export const useCreateTeam = (
