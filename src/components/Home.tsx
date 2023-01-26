@@ -7,7 +7,7 @@ const Home = () => {
   const { todos } = useGetTodosByUser();
   return (
     <>
-      <CreateTodoContainer>
+      <CreateTodoContainer activeTab={1}>
         <CreateTodoSection />
       </CreateTodoContainer>
       <TodoList todos={todos} />
