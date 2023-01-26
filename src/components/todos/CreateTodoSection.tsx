@@ -3,7 +3,7 @@ import Input from "../atoms/Input";
 import LoadingBar from "../atoms/LoadingBar";
 import CreateTodoIcon from "../icons/CreateTodoIcon";
 
-const CreateTodoSection = () => {
+const CreateTodoSection = ({ teamId }: { teamId?: string }) => {
   const { isLoading, handleCreateTodo, setTodoTitle } = useCreateTodo();
   return (
     <>
@@ -12,7 +12,7 @@ const CreateTodoSection = () => {
       ) : (
         <form
           className="flex flex-row items-center justify-evenly"
-          onSubmit={(e) => handleCreateTodo(e)}
+          onSubmit={(e) => handleCreateTodo(e, teamId)}
         >
           <Input
             className="input-bordered input-primary input-sm w-full mx-1 lg:mx-3"
