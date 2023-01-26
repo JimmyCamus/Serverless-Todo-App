@@ -12,7 +12,7 @@ const CreateTodoSection = () => {
       ) : (
         <form
           className="flex flex-row items-center justify-evenly"
-          onSubmit={handleCreateTodo}
+          onSubmit={(e) => handleCreateTodo(e)}
         >
           <Input
             className="input-bordered input-primary input-sm w-full mx-1 lg:mx-3"

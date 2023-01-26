@@ -13,7 +13,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CreateTodo, EditTodo, GetTodosByUser } from "../api/todo.api";
+import {
+  CreateTodo,
+  CreateTodoByTeam,
+  EditTodo,
+  GetTodosByUser,
+} from "../api/todo.api";
 import { fireStore } from "../lib/config/firebase.config";
 import { useUser } from "../lib/contexts/user.context";
 import { Team } from "../lib/types/team.types";
@@ -23,10 +28,15 @@ export const useCreateTodo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [todoTitle, setTodoTitle] = useState<string>("");
   const userContext = useUser();
-  const handleCreateTodo = async (e: FormEvent<HTMLFormElement>) => {
+  const handleCreateTodo = async (
+    e: FormEvent<HTMLFormElement>,
+    teamId?: string
+  ) => {
     e.preventDefault();
     setIsLoading(true);
-    await CreateTodo(todoTitle, userContext.user);
+    teamId
+      ? await CreateTodoByTeam(todoTitle, userContext.user, teamId)
+      : await CreateTodo(todoTitle, userContext.user);
     setIsLoading(false);
   };
 

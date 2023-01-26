@@ -66,7 +66,7 @@ export const EditTodo = async (uid: string, editValue: any) => {
 export const CreateTodoByTeam = async (
   title: string,
   user: User,
-  teamId: number
+  teamId: string
 ): Promise<boolean> => {
   const todoData = {
     title,
