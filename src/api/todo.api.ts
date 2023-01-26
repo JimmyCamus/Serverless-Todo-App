@@ -26,6 +26,7 @@ export const CreateTodo = async (
     },
     enabled: true,
     completed: false,
+    teamId: "",
   };
 
   try {
@@ -42,7 +43,8 @@ export const GetTodosByUser = async (user: User) => {
   const q = query(
     collection(fireStore, "todos"),
     where("user.email", "==", user.email),
-    where("enabled", "==", true)
+    where("enabled", "==", true),
+    where("teamId", "==", "")
   );
   const querySnapshot = await getDocs(q);
 
@@ -53,6 +55,7 @@ export const GetTodosByUser = async (user: User) => {
     title: doc.data().title,
     user: { email: doc.data().user.email, username: doc.data().user.username },
     completed: doc.data().completed,
+    teamId: "",
   }));
 
   return todos;
