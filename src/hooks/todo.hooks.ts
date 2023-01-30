@@ -24,6 +24,7 @@ import { fireStore } from "../lib/config/firebase.config";
 import { useUser } from "../lib/contexts/user.context";
 import { Team } from "../lib/types/team.types";
 import { Todo } from "../lib/types/todo.types";
+import { parseTodoData } from "../utils/todos.utils";
 
 export const useCreateTodo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -92,18 +93,7 @@ const firebaseListener = (
   query: Query<DocumentData>
 ) => {
   onSnapshot(query, (querySnapshot) => {
-    const todos = querySnapshot.docs.map((doc) => ({
-      uid: doc.id,
-      createdAt: new Date(doc.data().createdAt.seconds * 1000),
-      enabled: doc.data().enabled,
-      title: doc.data().title,
-      user: {
-        email: doc.data().user.email,
-        username: doc.data().user.username,
-      },
-      completed: doc.data().completed,
-      teamId: doc.data().teamId,
-    }));
+    const todos = querySnapshot.docs.map(parseTodoData);
     const sortedTodos = todos.sort((a, b) =>
       a.createdAt.getTime() < b.createdAt.getTime() ? -1 : 1
     );
@@ -130,7 +120,7 @@ export const useEditTodo = (todo: Todo) => {
         break;
 
       case "edit":
-        if (todoTitle === todo.title || todoTitle.trim() === "" ) {
+        if (todoTitle === todo.title || todoTitle.trim() === "") {
           break;
         }
         await EditTodo(todo.uid as string, { title: todoTitle });
