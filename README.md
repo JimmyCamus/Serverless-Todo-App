@@ -4,6 +4,11 @@ This project is about a to-do application, personal or collaborative, with real 
 
 ## ScreenShots
 
+![image](https://user-images.githubusercontent.com/86853554/215518425-da33b2dd-fd45-4da7-bff4-ff526c7357a1.png)
+
+![image](https://user-images.githubusercontent.com/86853554/215518879-5eaa89c8-77cf-436d-9942-d812a228f8b9.png)
+
+
 ## Features
 
 - Register (google or email & password)
