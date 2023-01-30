@@ -35,7 +35,6 @@ export const CreateTodo = async (
     await addDoc(collectionRef, todoData);
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 };
@@ -81,7 +80,6 @@ export const CreateTodoByTeam = async (
     await addDoc(collectionRef, todoData);
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 };

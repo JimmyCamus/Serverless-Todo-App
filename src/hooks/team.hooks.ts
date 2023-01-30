@@ -53,7 +53,6 @@ export const useJoinTeam = () => {
   const { user } = useUser();
 
   const handleJoinTeam = async (teamId: string) => {
-    console.log(teamId);
     const q = query(collection(fireStore, "teams"), where("id", "==", teamId));
     const team = await GetTeam(q);
     if (!team) {
