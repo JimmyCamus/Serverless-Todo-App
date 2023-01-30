@@ -1,46 +1,52 @@
-# Getting Started with Create React App
+# To Do App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is about a to-do application, personal or collaborative, with real time update.
 
-## Available Scripts
+## ScreenShots
 
-In the project directory, you can run:
+![image](https://user-images.githubusercontent.com/86853554/215518425-da33b2dd-fd45-4da7-bff4-ff526c7357a1.png)
 
-### `npm start`
+![image](https://user-images.githubusercontent.com/86853554/215518879-5eaa89c8-77cf-436d-9942-d812a228f8b9.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Features
 
-### `npm test`
+- Register (google or email & password)
+- Login (google or email & password)
+- Create Team
+- Join Team
+- To do's CRUD (personal & team)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Technologies
 
-### `npm run build`
+- React
+- Tailwind
+- Firebase
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Install process
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+git clone https://github.com/JimmyCamus/Serverless-Todo-App.git
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Move to project folder
 
-### `npm run eject`
+```
+cd Serverless-Todo-App
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Install node module
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+pnpm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Env config
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You can view the ".env.example" file to see which env variables the project needs.
 
-## Learn More
+### Start developer server
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+pnpm start
+```
