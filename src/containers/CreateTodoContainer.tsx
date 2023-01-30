@@ -1,15 +1,19 @@
 import { ReactNode } from "react";
+import TeamNavigation from "../components/teams/TeamNavigation";
 
-const CreateTodoContainer = ({ children }: { children: ReactNode }) => {
+const CreateTodoContainer = ({
+  activeTab,
+  children,
+}: {
+  activeTab: 1 | 2;
+  children: ReactNode;
+}) => {
   return (
     <>
       <div className="card w-full bg-[#fafafa] mt-8 shadow-lg">
         <div className="card-body">
           <div className="card-title justify-center">
-            <div className="tabs">
-              <button className="tab tab-active">Tab 1</button>
-              <button className="tab">Tab 2</button>
-            </div>
+            <TeamNavigation activeTab={activeTab} />
           </div>
           {children}
         </div>

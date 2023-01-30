@@ -1,4 +1,11 @@
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  DocumentData,
+  onSnapshot,
+  Query,
+  query,
+  where,
+} from "firebase/firestore";
 import {
   Dispatch,
   FormEvent,
@@ -6,20 +13,32 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CreateTodo, EditTodo, GetTodosByUser } from "../api/todo.api.ts";
+import {
+  CreateTodo,
+  CreateTodoByTeam,
+  EditTodo,
+  GetTodosByTeam,
+  GetTodosByUser,
+} from "../api/todo.api";
 import { fireStore } from "../lib/config/firebase.config";
 import { useUser } from "../lib/contexts/user.context";
+import { Team } from "../lib/types/team.types";
 import { Todo } from "../lib/types/todo.types";
-import { User } from "../lib/types/user.types";
+import { parseTodoData } from "../utils/todos.utils";
 
 export const useCreateTodo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [todoTitle, setTodoTitle] = useState<string>("");
   const userContext = useUser();
-  const handleCreateTodo = async (e: FormEvent<HTMLFormElement>) => {
+  const handleCreateTodo = async (
+    e: FormEvent<HTMLFormElement>,
+    teamId?: string
+  ) => {
     e.preventDefault();
     setIsLoading(true);
-    await CreateTodo(todoTitle, userContext.user);
+    teamId
+      ? await CreateTodoByTeam(todoTitle, userContext.user, teamId)
+      : await CreateTodo(todoTitle, userContext.user);
     setIsLoading(false);
   };
 
@@ -35,7 +54,34 @@ export const useGetTodosByUser = () => {
       setTodos(data);
     };
     handleGetTodos();
-    firebaseListener(setTodos, user);
+    const q = query(
+      collection(fireStore, "todos"),
+      where("user.email", "==", user.email),
+      where("enabled", "==", true),
+      where("teamId", "==", "")
+    );
+    firebaseListener(setTodos, q);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return { todos, user };
+};
+
+export const useGetTodosByTeam = (team: Team) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const { user } = useUser();
+  useEffect(() => {
+    const handleGetTodos = async () => {
+      const data = await GetTodosByTeam(team);
+      setTodos(data);
+    };
+    handleGetTodos();
+    const q = query(
+      collection(fireStore, "todos"),
+      where("teamId", "==", team.id),
+      where("enabled", "==", true)
+    );
+    firebaseListener(setTodos, q);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
@@ -44,25 +90,10 @@ export const useGetTodosByUser = () => {
 
 const firebaseListener = (
   setTodo: Dispatch<SetStateAction<Todo[]>>,
-  user: User
+  query: Query<DocumentData>
 ) => {
-  const q = query(
-    collection(fireStore, "todos"),
-    where("user.email", "==", user.email),
-    where("enabled", "==", true)
-  );
-  onSnapshot(q, (querySnapshot) => {
-    const todos = querySnapshot.docs.map((doc) => ({
-      uid: doc.id,
-      createdAt: new Date(doc.data().createdAt.seconds * 1000),
-      enabled: doc.data().enabled,
-      title: doc.data().title,
-      user: {
-        email: doc.data().user.email,
-        username: doc.data().user.username,
-      },
-      completed: doc.data().completed,
-    }));
+  onSnapshot(query, (querySnapshot) => {
+    const todos = querySnapshot.docs.map(parseTodoData);
     const sortedTodos = todos.sort((a, b) =>
       a.createdAt.getTime() < b.createdAt.getTime() ? -1 : 1
     );
@@ -71,24 +102,25 @@ const firebaseListener = (
 };
 
 export const useEditTodo = (todo: Todo) => {
-  const [todoTitle, setTodoTitle] = useState<string>(todo.title);
+  const [todoTitle, setTodoTitle] = useState<string>("");
   const [isCompleted, setIsCompleted] = useState<boolean>(todo.completed);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleEditTodo = async (type: "edit" | "completed" | "delete") => {
     setIsLoading(true);
     switch (type) {
       case "completed":
-        await EditTodo(todo.uid as string, { completed: !isCompleted });
-        setIsCompleted(!isCompleted);
+        await EditTodo(todo.uid as string, { completed: !todo.completed });
+        setIsCompleted(!todo.completed);
         break;
 
       case "delete":
         setIsCompleted(false);
         await EditTodo(todo.uid as string, { enabled: false });
+        setTodoTitle("");
         break;
 
       case "edit":
-        if (todoTitle === todo.title) {
+        if (todoTitle === todo.title || todoTitle.trim() === "") {
           break;
         }
         await EditTodo(todo.uid as string, { title: todoTitle });

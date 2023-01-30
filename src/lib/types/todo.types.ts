@@ -5,4 +5,5 @@ export type Todo = {
   title: string;
   user: { email: string; username: string };
   completed: boolean;
+  teamId?: string | number
 };

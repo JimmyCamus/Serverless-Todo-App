@@ -1,12 +1,12 @@
 import { CheckBoxEntry } from "../../lib/types/entry.types";
 
-const CheckBox = ({ onClick, checked }: CheckBoxEntry) => {
+const CheckBox = ({ onChange, checked }: CheckBoxEntry) => {
   return (
     <input
       type="checkbox"
       checked={checked}
       className="checkbox"
-      onClick={onClick}
+      onChange={onChange}
     />
   );
 };

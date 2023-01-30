@@ -38,6 +38,6 @@ export type LoginFormEntry = {
 };
 
 export type CheckBoxEntry = {
-  onClick?: React.MouseEventHandler<HTMLInputElement>;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
   checked?: boolean;
 };
