@@ -29,7 +29,7 @@ const NoTeam = ({
           className="lg:max-w-lg"
           alt="landing page of todo app"
         />
-        <p className="text-3xl mt-8 font-bold">You don't have a team!</p>
+        <p className="text-center text-3xl mt-8 font-bold">You don't have a team!</p>
         <Button className="btn-primary mt-8 w-1/2" onClick={handleCreateTeam}>
           Create Team
         </Button>
